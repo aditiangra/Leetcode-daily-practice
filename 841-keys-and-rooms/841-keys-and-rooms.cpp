@@ -1,24 +1,33 @@
 class Solution {
 public:
-    bool canVisitAllRooms(vector<vector<int>>& rooms) {
-        int n=rooms.size();
-        vector<bool>visited(rooms.size(),false);
-      dfs(visited,rooms,0);
-        for(int i=0;i<visited.size();i++)
-        {
-            if(visited[i]==false)return false;
-        }
-        return true;
-    }
-    void dfs(vector<bool>&visited,vector<vector<int>>& rooms,int i)
+   void dfs(int src,vector<vector<int>>&rooms,vector<bool>&visited)
     {
-        visited[i]=true;
-        for(int j=0;j<rooms[i].size();j++)
+        visited[src]=true;
+        for(int i=0;i<rooms[src].size();i++)
         {
-            if(visited[rooms[i][j]]==false)
+            if(visited[rooms[src][i]]==false)
             {
-                dfs(visited,rooms,rooms[i][j]);
+                dfs(rooms[src][i],rooms,visited); 
             }
         }
+       
+    }
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        int i, V=rooms.size();
+        vector<bool>visited(V,false);
+          dfs(0,rooms,visited);
+        for(int i=0;i<V;i++)
+        {
+            if(!visited[i])
+            {
+                    return false;
+            }
+        }
+        return true;
+        
+        
+        
+        
+        
     }
 };
