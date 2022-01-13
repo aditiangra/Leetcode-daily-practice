@@ -13,24 +13,34 @@ class Solution {
         {
             if(vis[i]==false)
             {
-                if(checkForCycle(i,-1,vis,adj))return true;
+                if(checkForCycle(i,vis,adj))return true;
             }
         }
         return false;
     }
-    bool checkForCycle(int node,int parent,vector<bool>&vis,vector<int> adj[])
+    bool checkForCycle(int node,vector<bool>&vis,vector<int> adj[])
     {
+        queue<pair<int,int>>q;
+        q.push({node,-1});
         vis[node]=true;
-        for(auto it:adj[node])
+        while(q.empty()==false)
         {
-            if(vis[it]==false)
+            int current=q.front().first;
+            int parent=q.front().second;
+            q.pop();
+            for(auto it:adj[current])
             {
-               if(checkForCycle(it,node,vis,adj)==true) return true;
+                if(vis[it]==false)
+                {
+                    vis[it]=true;
+                    q.push({it,current});
+                    
+                }
+                else if(parent!=it)return true;
             }
-            else if(it!=parent)return true;
         }
-        return false;
         
+        return false;
     }
 };
 
