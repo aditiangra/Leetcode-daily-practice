@@ -12,28 +12,40 @@
 class Solution {
 public:
     TreeNode* deleteNode(TreeNode* root, int key) {
-        if(!root) return nullptr;
-		// search for key node
-        if(root -> val < key) root -> right = deleteNode(root -> right, key);
-        else if(root -> val > key) root -> left = deleteNode(root -> left, key);
-        else { // root -> val == key
-            auto toDelete = root;
-            if(!root -> left || !root -> right) 
-                root = root -> left ? root -> left : root -> right;
-            else {
-				auto cur = root, par = root;
-                root = root -> right;
-                while(root -> left) par = root, root = root -> left;  // finding smallest in right subtree
-                cur -> val = root -> val;                             // replace node to be deleted- cur with value of smallest node found
-				// take care of child node...same as above
-                if(par -> left == root) par -> left = root -> right;
-                else par -> right = root -> right;
-				toDelete = root;
-                root = cur;
+        if(root==nullptr)return root;
+        if(root->val==key)return helper(root);
+        TreeNode* dummy=root;
+        while(root!=nullptr)
+        {
+            if(root->val >key)
+            {
+                if(root->left!=nullptr and root->left->val==key)
+                { root->left=helper(root->left);
+                 break;}
+                else root=root->left;
             }
-            delete toDelete;            			
+            else
+            {
+                if(root->right!=nullptr and root->right->val==key)
+                { root->right=helper(root->right);
+                 break;}
+                else root=root->right;
+            }
         }
-        return root;
-    
+        return dummy;
+    }
+    TreeNode* helper(TreeNode* root)
+    {
+        if(root->left==nullptr)return root->right;
+        if(root->right==nullptr)return root->left;
+        TreeNode* rightChild=root->right;
+        TreeNode* lastRight=findLastRight(root->left);
+        lastRight->right=rightChild;
+        return root->left;
+    }
+    TreeNode* findLastRight(TreeNode* root)
+    {
+        if(root->right==nullptr)return root;
+       return findLastRight(root->right);
     }
 };
