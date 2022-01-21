@@ -10,36 +10,35 @@ class Solution
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
 	    // code here
-	    queue<int>q;
-	    vector<int> indegree(V,0);
+	    stack<int>st;
+	    vector<int>result;
+	    vector<int> visited(V,0);
 	    for(int i=0;i<V;i++)
 	    {
-	        for(auto it:adj[i])
+	        if(visited[i]==0)
 	        {
-	            indegree[it]++;
+	            dfs(i,adj,visited,st);
 	        }
 	    }
-	    //made indegree array//
-	    for(int i=0;i<indegree.size();i++)
+	    while(st.empty()==false)
 	    {
-	        if(indegree[i]==0)q.push(i);
+	        result.push_back(st.top());
+	        st.pop();
 	    }
-	    vector<int>topo;
-	    while(q.empty()==false)
+	    return result;
+	}
+	void dfs(int node,vector<int> adj[], vector<int> &visited,stack<int>&st)
+	{
+	    visited[node]=1;
+	    for(auto it:adj[node])
 	    {
-	        int node=q.front();
-	        q.pop();
-	        topo.push_back(node);
-	        for(auto it:adj[node])
+	        if(visited[it]==false)
 	        {
-	            indegree[it]--;
-	            if(indegree[it]==0)
-	            {
-	                q.push(it);
-	            }
+	            dfs(it,adj,visited,st);
 	        }
+	       
 	    }
-	    return topo;
+	     st.push(node);
 	}
 };
 
