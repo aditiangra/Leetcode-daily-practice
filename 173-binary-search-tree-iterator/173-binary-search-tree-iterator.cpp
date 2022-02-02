@@ -11,24 +11,26 @@
  */
 class BSTIterator {
 public:
-    int curr=0,pos=0,arr[100001];
+    stack<TreeNode*>st;
     BSTIterator(TreeNode* root) {
-     dfs(root);
+        pushAll(root);
     }
-    void dfs(TreeNode* root)
+    void pushAll(TreeNode* node)
     {
-        if(root==nullptr)return;
-        dfs(root->left);
-        arr[pos++]=root->val;
-        dfs(root->right);
+        for(;node!=nullptr;node=node->left)
+        {
+            st.push(node);
+        }
     }
-    
     int next() {
-        return arr[curr++];
+        TreeNode* node=st.top();
+        st.pop();
+        pushAll(node->right);
+        return node->val;
     }
     
     bool hasNext() {
-        return curr<pos;
+        return (!st.empty());
     }
 };
 
