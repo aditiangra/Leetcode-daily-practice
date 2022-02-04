@@ -10,28 +10,38 @@
  * };
  */
 class Solution {
-public:
-    vector<int>v;
-    int i=-1;
+    private:
+    TreeNode* first;
+    TreeNode* prev;
+    TreeNode* middle;
+    TreeNode* last;
+    private:
     void inorder(TreeNode* root)
     {
         if(root==nullptr)return;
         inorder(root->left);
-        v.push_back(root->val);
+        if(prev!=nullptr and (root->val<prev->val))
+        {
+            if(first==nullptr)
+            {
+                //first violation//
+                first=prev;
+                middle=root;
+            }
+            else
+            {
+                last=root;
+            }
+        }
+        prev=root;
         inorder(root->right);
     }
-    void solve(TreeNode* root)
-    {
-        if(root!=nullptr)
-        {
-            solve(root->left);
-            root->val=v[++i];
-            solve(root->right);
-        }
-    }
+public:
     void recoverTree(TreeNode* root) {
-       inorder(root);
-        sort(v.begin(),v.end());
-        solve(root);
+       first=middle=last=NULL;
+        prev=new TreeNode(INT_MIN);
+        inorder(root);
+        if(first && last)swap(first->val,last->val);
+        else if(first && middle)swap(first->val,middle->val);
     }
 };
