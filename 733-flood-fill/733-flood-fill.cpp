@@ -6,7 +6,7 @@ public:
         int color=image[sr][sc];
         if(color!=newColor)
         {
-            bfs(image,sr,sc,color,newColor,n,m);
+            dfs(image,sr,sc,color,newColor,n,m);
         }
         return image;
     }
