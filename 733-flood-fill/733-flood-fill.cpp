@@ -10,59 +10,31 @@ public:
         }
         return image;
     }
-    void bfs(vector<vector<int>>& image,int i, int j,int color, int newColor,int n,int m)
+    bool isValid(vector<vector<int>>& image, int sr, int sc,int n,int m,int color)
     {
-        queue<pair<int,int>>q;
-        q.push({i,j});
-        while(q.empty()==false)
+        if(sr>=0 and sr<n and sc>=0 and sc<m and image[sr][sc]==color)return true;
+        return false;
+    }
+    void dfs(vector<vector<int>>& image, int sr, int sc,int color,int newColor,int n,int m)
+    {
+        image[sr][sc]=newColor;
+        if(isValid(image,sr+1,sc,n,m,color)==true)
         {
-            auto current=q.front();
-            q.pop();
-            int x=current.first;
-            int y=current.second;
-            image[x][y]=newColor;
-            if(isValid(image,x+1,y,color,newColor,n,m))
-        {
-            q.push({x+1,y});
+            dfs(image,sr+1,sc,color,newColor,n,m);
         }
-         if(isValid(image,x-1,y,color,newColor,n,m))
+         if(isValid(image,sr-1,sc,n,m,color)==true)
         {
-            q.push({x-1,y});
+            dfs(image,sr-1,sc,color,newColor,n,m);
         }
-         if(isValid(image,x,y+1,color,newColor,n,m))
+         if(isValid(image,sr,sc+1,n,m,color)==true)
         {
-          q.push({x,y+1});
+            dfs(image,sr,sc+1,color,newColor,n,m);
         }
-         if(isValid(image,x,y-1,color,newColor,n,m))
+         if(isValid(image,sr,sc-1,n,m,color)==true)
         {
-            q.push({x,y-1});
-        }
+            dfs(image,sr,sc-1,color,newColor,n,m);
         }
         
     }
-    void dfs(vector<vector<int>>& image,int i, int j,int color, int newColor,int n,int m)
-    {
-        image[i][j]=newColor;
-        if(isValid(image,i+1,j,color,newColor,n,m))
-        {
-            dfs(image,i+1,j,color,newColor,n,m);
-        }
-         if(isValid(image,i-1,j,color,newColor,n,m))
-        {
-            dfs(image,i-1,j,color,newColor,n,m);
-        }
-         if(isValid(image,i,j+1,color,newColor,n,m))
-        {
-            dfs(image,i,j+1,color,newColor,n,m);
-        }
-         if(isValid(image,i,j-1,color,newColor,n,m))
-        {
-            dfs(image,i,j-1,color,newColor,n,m);
-        }
-    }
-    bool isValid(vector<vector<int>>& image,int i, int j,int color, int newColor,int n,int m)
-    {
-        if(i>=0 and j>=0 and i<n and j<m and image[i][j]==color)return true;
-        return false;
-    }
+    
 };
