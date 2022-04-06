@@ -6,33 +6,46 @@ public:
         int color=image[sr][sc];
         if(color!=newColor)
         {
-            dfs(image,sr,sc,color,newColor,n,m);
+            bfs(image,sr,sc,color,newColor,n,m);
         }
         return image;
     }
-    bool isValid(vector<vector<int>>& image, int sr, int sc,int n,int m,int color)
+    bool isValid(vector<vector<int>>& image, int sr, int sc,int color,int n,int m)
     {
         if(sr>=0 and sr<n and sc>=0 and sc<m and image[sr][sc]==color)return true;
         return false;
     }
-    void dfs(vector<vector<int>>& image, int sr, int sc,int color,int newColor,int n,int m)
+    void bfs(vector<vector<int>>& image, int sr, int sc,int color,int newColor,int n,int m)
     {
+       queue<pair<int,int>>q;
+        q.push({sr,sc});
         image[sr][sc]=newColor;
-        if(isValid(image,sr+1,sc,n,m,color)==true)
+        while(q.empty()==false)
         {
-            dfs(image,sr+1,sc,color,newColor,n,m);
-        }
-         if(isValid(image,sr-1,sc,n,m,color)==true)
-        {
-            dfs(image,sr-1,sc,color,newColor,n,m);
-        }
-         if(isValid(image,sr,sc+1,n,m,color)==true)
-        {
-            dfs(image,sr,sc+1,color,newColor,n,m);
-        }
-         if(isValid(image,sr,sc-1,n,m,color)==true)
-        {
-            dfs(image,sr,sc-1,color,newColor,n,m);
+            auto pair=q.front();
+            q.pop();
+            int x=pair.first;
+            int y=pair.second;
+            if(isValid(image,x-1,y,color,n,m)==true)
+            {
+                image[x-1][y]=newColor;
+                q.push({x-1,y});
+            }
+             if(isValid(image,x+1,y,color,n,m)==true)
+            {
+                 image[x+1][y]=newColor;
+                q.push({x+1,y});
+            }
+             if(isValid(image,x,y-1,color,n,m)==true)
+            {
+                 image[x][y-1]=newColor;
+                q.push({x,y-1});
+            }
+             if(isValid(image,x,y+1,color,n,m)==true)
+            {
+                 image[x][y+1]=newColor;
+                q.push({x,y+1});
+            }
         }
         
     }
