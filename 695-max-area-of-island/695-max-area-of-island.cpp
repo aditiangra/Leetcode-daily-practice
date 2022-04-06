@@ -12,7 +12,7 @@ public:
                 if(grid[i][j]==1)
                 {
                     area=1;
-                    dfs(grid,i,j,n,m,area);
+                    bfs(grid,i,j,n,m,area);
                     ans=max(ans,area);
                 }
             }
@@ -24,28 +24,41 @@ public:
         if(i>=0 and i<n and j>=0 and j<m and grid[i][j]==1)return true;
         return false;
     }
-    void dfs(vector<vector<int>>& grid,int i,int j,int n,int m,int &area)
+    void bfs(vector<vector<int>>& grid,int i,int j,int n,int m,int &area)
     {
+        queue<pair<int,int>>q;
+        q.push({i,j});
         grid[i][j]=2;
-        if(isValid(grid,i+1,j,n,m,area))
+        while(q.empty()==false)
         {
-            area++;
-            dfs(grid,i+1,j,n,m,area);
-        }
-        if(isValid(grid,i-1,j,n,m,area))
-        {
-            area++;
-            dfs(grid,i-1,j,n,m,area);
-        }
-        if(isValid(grid,i,j+1,n,m,area))
-        {
-            area++;
-            dfs(grid,i,j+1,n,m,area);
-        }
-        if(isValid(grid,i,j-1,n,m,area))
-        {
-            area++;
-            dfs(grid,i,j-1,n,m,area);
+            auto pair=q.front();
+            q.pop();
+            int x=pair.first;
+            int y=pair.second;
+            if(isValid(grid,x-1,y,n,m,area))
+            {
+                area++;
+                grid[x-1][y]=2;
+                q.push({x-1,y});
+            }
+             if(isValid(grid,x+1,y,n,m,area))
+            {
+                area++;
+                 grid[x+1][y]=2;
+                q.push({x+1,y});
+            }
+             if(isValid(grid,x,y-1,n,m,area))
+            {
+                area++;
+                 grid[x][y-1]=2;
+                q.push({x,y-1});
+            }
+             if(isValid(grid,x,y+1,n,m,area))
+            {
+                area++;
+                 grid[x][y+1]=2;
+                q.push({x,y+1});
+            }
         }
     }
 };
