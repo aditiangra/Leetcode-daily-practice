@@ -1,38 +1,51 @@
 class Solution {
 public:
-    bool isValid(vector<vector<int>>&grid,int i,int j,int m,int n)
-    {
-        if(i>=0 && i<n && j>=0 && j<m &&grid[i][j]==1)return true;
-        return false;
-    }
-    void DFS(vector<vector<int>>&grid,int i,int j,int m,int n,int &area)
-    {
-        area++;
-        grid[i][j]=0;
-        if(isValid(grid,i+1,j,m,n)==true)DFS(grid,i+1,j,m,n,area);
-         if(isValid(grid,i-1,j,m,n)==true)DFS(grid,i-1,j,m,n,area);
-         if(isValid(grid,i,j-1,m,n)==true)DFS(grid,i,j-1,m,n,area);
-         if(isValid(grid,i,j+1,m,n)==true)DFS(grid,i,j+1,m,n,area);
-    }
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         int n=grid.size();
         int m=grid[0].size();
         int ans=0;
-        for(int i=0;i<grid.size();i++)
+        int area=0;
+        for(int i=0;i<n;i++)
         {
-            for(int j=0;j<grid[0].size();j++)
+            for(int j=0;j<m;j++)
             {
                 if(grid[i][j]==1)
                 {
-                    int area=0;
-                    DFS(grid,i,j,m,n,area);
-            
+                    area=1;
+                    dfs(grid,i,j,n,m,area);
                     ans=max(ans,area);
                 }
             }
         }
         return ans;
     }
-    
-    
+    bool isValid(vector<vector<int>>& grid,int i,int j,int n,int m,int &area)
+    {
+        if(i>=0 and i<n and j>=0 and j<m and grid[i][j]==1)return true;
+        return false;
+    }
+    void dfs(vector<vector<int>>& grid,int i,int j,int n,int m,int &area)
+    {
+        grid[i][j]=2;
+        if(isValid(grid,i+1,j,n,m,area))
+        {
+            area++;
+            dfs(grid,i+1,j,n,m,area);
+        }
+        if(isValid(grid,i-1,j,n,m,area))
+        {
+            area++;
+            dfs(grid,i-1,j,n,m,area);
+        }
+        if(isValid(grid,i,j+1,n,m,area))
+        {
+            area++;
+            dfs(grid,i,j+1,n,m,area);
+        }
+        if(isValid(grid,i,j-1,n,m,area))
+        {
+            area++;
+            dfs(grid,i,j-1,n,m,area);
+        }
+    }
 };
