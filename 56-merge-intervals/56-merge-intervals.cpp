@@ -1,9 +1,11 @@
+//Time Complexity: O(NlogN)+O(N*N). O(NlogN)
+//Space Complexity: O(N)
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(),intervals.end());
+        sort(intervals.begin(),intervals.end());//O(NlogN)
         vector<vector<int>> ans;
-        for(int i=0;i<intervals.size();i++)
+        for(int i=0;i<intervals.size();i++)//O(N^2)
         {
             int start=intervals[i][0];//1
             int end=intervals[i][1];//3
@@ -19,7 +21,7 @@ public:
                 {
                     end=max(end,intervals[j][1]);
                 }
-            }
+            }//O(NlogN)
             vector<int>res;
             res.push_back(start);
             res.push_back(end);
