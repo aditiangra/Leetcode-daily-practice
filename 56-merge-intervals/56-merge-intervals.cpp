@@ -1,31 +1,28 @@
-//Time Complexity: O(NlogN)+O(N*N). O(NlogN)
-//Space Complexity: O(N)
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(),intervals.end());//O(NlogN)
+        sort(intervals.begin(),intervals.end());
         vector<vector<int>> ans;
-        for(int i=0;i<intervals.size();i++)//O(N^2)
+        for(int i=0;i<intervals.size();i++)
         {
-            int start=intervals[i][0];//1
-            int end=intervals[i][1];//3
-           //if the vector is alreay present in the data structure we are not gonna push it again//
-            if(ans.empty()==false){
-            if(start<=ans.back()[1])
+            if(ans.empty()==true)
             {
-                continue;
-            }}
-            for(int j=i+1;j<intervals.size();j++)
+                vector<int>res;
+                res.push_back(intervals[0][0]);
+                 res.push_back(intervals[0][1]);
+                ans.push_back(res);
+            }
+            else if(ans.back()[1]>=intervals[i][0])
             {
-                if(intervals[j][0]<=end)
-                {
-                    end=max(end,intervals[j][1]);
-                }
-            }//O(NlogN)
-            vector<int>res;
-            res.push_back(start);
-            res.push_back(end);
-            ans.push_back(res);
+                ans.back()[1]=max(ans.back()[1],intervals[i][1]);
+            }
+            else if(ans.back()[1]<intervals[i][0]) 
+            {
+                 vector<int>res;
+                res.push_back(intervals[i][0]);
+                 res.push_back(intervals[i][1]);
+                ans.push_back(res);
+            }
         }
         return ans;
     }
