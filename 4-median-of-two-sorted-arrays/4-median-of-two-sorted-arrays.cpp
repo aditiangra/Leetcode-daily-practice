@@ -1,35 +1,34 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int m = nums1.size(), n = nums2.size();
-        if(m > n)   return findMedianSortedArrays(nums2, nums1);
-        
-        int low = 0, high = m;
-        while(left <= right) {
-            int i = low + (high - low) / 2;
-            int j = (m + n) / 2 - i;
-            
-            int left1  = (i == 0)? INT_MIN : nums1[i - 1];
-            int right1 = (i == m)? INT_MAX : nums1[i];
-            int left2  = (j == 0)? INT_MIN : nums2[j - 1];
-            int right2 = (j == n)? INT_MAX : nums2[j];
-            
-            if(left1 > right2) {
-                high = i - 1;	// decrease i
-            }
-            else if(left2 > right1) {
-                low = i + 1;	// increase i
-            }
-            else {
-                if((m + n) & 1)
-                    return (i == m)? (double)right2 : (j == n)? (double)right1 : (double)min(right1, right2);
-                
-                double l = (i == 0)? (double)left2 : (j == 0)? double(left1) : (double)max(left1, left2);
-                double r = (i == m)? (double)right2 : (j == n)? (double)right1 : (double)min(right1, right2);
-                return (l + r) / 2;
-            }
+        int n=nums1.size();
+        int m=nums2.size();
+        vector<int> nums3(m+n);
+        int i=0,j=0,k=0;
+        while(i<n and j<m)
+        {
+            if(nums1[i]<=nums2[j])nums3[k++]=nums1[i++];
+            else nums3[k++]=nums2[j++];
         }
-        
-        return double(-1);
+        while(i<n)
+        {
+            nums3[k++]=nums1[i++];
+        }
+        while(j<m)
+        {
+            nums3[k++]=nums2[j++];
+        }
+        int size=n+m;
+        for(int i=0;i<size;i++)cout<<nums3[i]<<" ";
+        if(size%2==0)
+        {
+            int a=size/2;
+          return double(nums3[a]+nums3[a-1])/2;
+        }
+        else
+        {
+            int a=size/2;
+            return (double)nums3[a];
+        }
     }
 };
