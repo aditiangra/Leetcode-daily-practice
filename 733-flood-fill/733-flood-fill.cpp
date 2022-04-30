@@ -3,51 +3,46 @@ public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
         int n=image.size();
         int m=image[0].size();
-        int color=image[sr][sc];
-        if(color!=newColor)
+       int oldColor=image[sr][sc];
+        dfs(image,sr,sc,oldColor,newColor);
+        for(int i=0;i<image.size();i++)
         {
-            bfs(image,sr,sc,color,newColor,n,m);
+            for(int j=0;j<image[0].size();j++)
+            {
+                if(image[i][j]==-1)
+                {
+                    image[i][j]=newColor;
+                }
+            }
         }
         return image;
     }
-    bool isValid(vector<vector<int>>& image, int sr, int sc,int color,int n,int m)
+    void dfs(vector<vector<int>>&image,int i,int j,int oldColor,int newColor)
     {
-        if(sr>=0 and sr<n and sc>=0 and sc<m and image[sr][sc]==color)return true;
+        image[i][j]=-1;
+        if(isValid(image,i-1,j,oldColor,newColor)==true)
+        {
+            dfs(image,i-1,j,oldColor,newColor);
+        }
+         if(isValid(image,i+1,j,oldColor,newColor)==true)
+        {
+            dfs(image,i+1,j,oldColor,newColor);
+        }
+         if(isValid(image,i,j-1,oldColor,newColor)==true)
+        {
+            dfs(image,i,j-1,oldColor,newColor);
+        }
+         if(isValid(image,i,j+1,oldColor,newColor)==true)
+        {
+            dfs(image,i,j+1,oldColor,newColor);
+        }
+    }
+    bool isValid(vector<vector<int>>&image,int i,int j,int oldColor,int newColor)
+    {
+        if(i>=0 and j>=0 and i<image.size() and j<image[0].size() and image[i][j]==oldColor)
+        {
+            return true;
+        }
         return false;
     }
-    void bfs(vector<vector<int>>& image, int sr, int sc,int color,int newColor,int n,int m)
-    {
-       queue<pair<int,int>>q;
-        q.push({sr,sc});
-        image[sr][sc]=newColor;
-        while(q.empty()==false)
-        {
-            auto pair=q.front();
-            q.pop();
-            int x=pair.first;
-            int y=pair.second;
-            if(isValid(image,x-1,y,color,n,m)==true)
-            {
-                image[x-1][y]=newColor;
-                q.push({x-1,y});
-            }
-             if(isValid(image,x+1,y,color,n,m)==true)
-            {
-                 image[x+1][y]=newColor;
-                q.push({x+1,y});
-            }
-             if(isValid(image,x,y-1,color,n,m)==true)
-            {
-                 image[x][y-1]=newColor;
-                q.push({x,y-1});
-            }
-             if(isValid(image,x,y+1,color,n,m)==true)
-            {
-                 image[x][y+1]=newColor;
-                q.push({x,y+1});
-            }
-        }
-        
-    }
-    
 };
