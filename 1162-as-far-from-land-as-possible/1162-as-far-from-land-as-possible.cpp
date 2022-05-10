@@ -1,8 +1,9 @@
+//use of multisource dfs//
 class Solution {
 public:
-    bool isValid(vector<vector<int>>& grid,int x,int y)
+    bool isValid(vector<vector<int>>& grid,int i,int j)
     {
-        if(x>=0 and y>=0 and x<grid.size() and y<grid[0].size() and grid[x][y]==0)return true;
+        if(i>=0 and j>=0 and i<grid.size() and j<grid[0].size() and grid[i][j]==0)return true;
         return false;
     }
     int maxDistance(vector<vector<int>>& grid) {
@@ -17,40 +18,37 @@ public:
                 }
             }
         }
-        int count=0;
+        int ant=0;
         while(q.empty()==false)
         {
-            count++;
+            ant++;
             int n=q.size();
-            while(n--)
+            
+            for(int i=0;i<n;i++)
             {
                 int x=q.front().first;
                 int y=q.front().second;
                 q.pop();
                 if(isValid(grid,x-1,y))
-                {
-                    q.push({x-1,y});
-                    grid[x-1][y]=1;
+                {q.push({x-1,y});
+                 grid[x-1][y]=1;
                 }
                  if(isValid(grid,x+1,y))
-                {
-                    q.push({x+1,y});
-                    grid[x+1][y]=1;
+                {q.push({x+1,y});
+                 grid[x+1][y]=1;
                 }
                  if(isValid(grid,x,y-1))
-                {
-                    q.push({x,y-1});
-                    grid[x][y-1]=1;
+                {q.push({x,y-1});
+                 grid[x][y-1]=1;
                 }
                  if(isValid(grid,x,y+1))
-                {
-                    q.push({x,y+1});
-                    grid[x][y+1]=1;
+                {q.push({x,y+1});
+                 grid[x][y+1]=1;
                 }
             }
         }
-        if(count>1)
-            return count-1;
+        if(ant>1)return ant-1;
         return -1;
+        
     }
 };
