@@ -1,49 +1,59 @@
-class Solution {
+class Solution
+{
 public:
-    int orangesRotting(vector<vector<int>>& grid) 
+    int orangesRotting(vector<vector<int>> &grid)
     {
-        
-        vector<int> dir={-1,0,1,0,-1}; //used for finding all 4 adjacent coordinates
-        
-        int m=grid.size();
-        int n=grid[0].size();
-        
-        queue<pair<int,int>> q;
-        int fresh=0; //To keep track of all fresh oranges left
-        for(int i=0;i<m;i++)
-            for(int j=0;j<n;j++)
-            {
-                if(grid[i][j]==2)
-                    q.push({i,j});
-                if(grid[i][j]==1)
-                    fresh++;
-            }
-        int ans=-1; //initialised to -1 since after each step we increment the time by 1 and initially all rotten oranges started at 0.
-        while(!q.empty())
+        if (grid.empty()) // if there is no orange.
+            return 0;
+
+        int countFreshOranges = 0;
+        int m = grid.size();
+        int n = grid[0].size();
+
+        queue<pair<int, int>> q; // queue to store the index of the cell where rotten oranges are placed.
+
+        for (int i = 0; i < m; i++)
         {
-            int sz=q.size();
-            while(sz--)
+            for (int j = 0; j < n; j++)
             {
-                pair<int,int> p=q.front();
+                if (grid[i][j] == 1)
+                    countFreshOranges++;
+                else if (grid[i][j] == 2)
+                    q.push({i, j});
+            }
+        }
+
+        int time = 0;
+        // four adjacent positions at which the oranged placed will get rotten.
+        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+
+        while (countFreshOranges != 0 && !q.empty())
+        {
+            int qsize = q.size();
+
+            for (int i = 0; i < qsize; i++)
+            {
+                int rottenI = q.front().first;
+                int rottenJ = q.front().second;
                 q.pop();
-                for(int i=0;i<4;i++)
+
+                for (auto d : dirs)
                 {
-                    int r=p.first+dir[i];
-                    int c=p.second+dir[i+1];
-                    if(r>=0 && r<m && c>=0 && c<n &&grid[r][c]==1)
+                    int newX = rottenI + d.first;
+                    int newY = rottenJ + d.second;
+                    // if we got any fresh orange adjacent to the rotten orange then it will get rotten and
+                    // count of fresh oranges will reduce and we will push the new index of rotten orange in 
+                    // the queue.
+                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] == 1)
                     {
-                        grid[r][c]=2;
-                        q.push({r,c});
-                        fresh--; // decrement by 1 foreach fresh orange that now is rotten
+                        grid[newX][newY] = 2;
+                        countFreshOranges--;
+                        q.push({newX, newY});
                     }
-                    
                 }
             }
-            ans++; //incremented after each minute passes
+            time++;
         }
-        if(fresh>0) return -1; //if fresh>0 that means there are fresh oranges left
-        if(ans==-1) return 0; //we initialised with -1, so if there were no oranges it'd take 0 mins.
-        return ans;
-        
+        return countFreshOranges == 0 ? time : -1;
     }
 };
