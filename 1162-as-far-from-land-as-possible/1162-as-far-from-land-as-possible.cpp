@@ -1,4 +1,3 @@
-//use of multisource dfs//
 class Solution {
 public:
     bool isValid(vector<vector<int>>& grid,int i,int j)
@@ -7,48 +6,49 @@ public:
         return false;
     }
     int maxDistance(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
         queue<pair<int,int>>q;
-        for(int i=0;i<grid.size();i++)
+        for(int i=0;i<n;i++)
         {
-            for(int j=0;j<grid[0].size();j++)
+            for(int j=0;j<m;j++)
             {
-                if(grid[i][j]==1)
-                {
-                    q.push({i,j});
-                }
+                if(grid[i][j]==1)q.push({i,j});
             }
         }
-        int ant=0;
+        int cnt=0;
         while(q.empty()==false)
         {
-            ant++;
+            cnt++;
             int n=q.size();
-            
-            for(int i=0;i<n;i++)
+            for(int k=0;k<n;k++)
             {
                 int x=q.front().first;
                 int y=q.front().second;
                 q.pop();
                 if(isValid(grid,x-1,y))
-                {q.push({x-1,y});
-                 grid[x-1][y]=1;
+                {
+                    q.push({x-1,y});
+                    grid[x-1][y]=1;
                 }
-                 if(isValid(grid,x+1,y))
-                {q.push({x+1,y});
-                 grid[x+1][y]=1;
+                  if(isValid(grid,x+1,y))
+                {
+                    q.push({x+1,y});
+                       grid[x+1][y]=1;
                 }
-                 if(isValid(grid,x,y-1))
-                {q.push({x,y-1});
-                 grid[x][y-1]=1;
+                  if(isValid(grid,x,y-1))
+                {
+                    q.push({x,y-1});
+                       grid[x][y-1]=1;
                 }
-                 if(isValid(grid,x,y+1))
-                {q.push({x,y+1});
-                 grid[x][y+1]=1;
+                  if(isValid(grid,x,y+1))
+                {
+                    q.push({x,y+1});
+                       grid[x][y+1]=1;
                 }
             }
         }
-        if(ant>1)return ant-1;
+        if(cnt>1)return cnt-1;
         return -1;
-        
     }
 };
