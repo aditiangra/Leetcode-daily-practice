@@ -5,7 +5,7 @@ public:
 
     string intToRoman(int N) {
         string ans = "";
-        for (int i = 0; N; i++)
+        for (int i = 0; N>0; i++)
             while (N >= val[i]) 
             {ans += rom[i];
              N -= val[i];
