@@ -1,47 +1,60 @@
+//0----->land 1--->water
+//Approach:By calling boundary dfs remve all boundary land as it cant be an island
+//then call dfs on the whole grid
 class Solution {
 public:
-    void DFS(vector<vector<int>>& grid,int i,int j,int n,int m)
-    {
-        grid[i][j]=1;
-        if(isValid(grid,i+1,j,n,m))DFS(grid,i+1,j,n,m);
-         if(isValid(grid,i-1,j,n,m))DFS(grid,i-1,j,n,m);
-         if(isValid(grid,i,j+1,n,m))DFS(grid,i,j+1,n,m);
-         if(isValid(grid,i,j-1,n,m))DFS(grid,i,j-1,n,m);
-    }
-    bool isValid(vector<vector<int>>& grid,int i,int j,int n,int m)
-    {
-        if(i>=0 && i<n &&j>=0 && j<m &&grid[i][j]==0)return true;
-        return false;
-    }
     int closedIsland(vector<vector<int>>& grid) {
         int n=grid.size();
         int m=grid[0].size();
-        int cnt=0;
-        for(int i=0;i<n;i++)
+        int i,j;
+        for(i=0;i<n;i++)
         {
-            int j=0;
-            if(grid[i][j]==0)DFS(grid,i,j,n,m);
+            j=0;
+            if(grid[i][j]==0)boundarydfs(grid,i,j,n,m);
             j=m-1;
-            if(grid[i][j]==0)DFS(grid,i,j,n,m);
+            if(grid[i][j]==0)boundarydfs(grid,i,j,n,m);
         }
-        for(int j=0;j<m;j++)
+        for(j=0;j<m;j++)
         {
-            int i=0;
-            if(grid[i][j]==0)DFS(grid,i,j,n,m);
+            i=0;
+            if(grid[i][j]==0)boundarydfs(grid,i,j,n,m);
             i=n-1;
-            if(grid[i][j]==0)DFS(grid,i,j,n,m);
+            if(grid[i][j]==0)boundarydfs(grid,i,j,n,m);
         }
-        for(int i=0;i<n;i++)
+        int cnt=0;
+        for(i=0;i<n;i++)
         {
-            for(int j=0;j<m;j++)
+            for(j=0;j<m;j++)
             {
                 if(grid[i][j]==0)
                 {
-                    DFS(grid,i,j,n,m);
+                    dfs(grid,i,j,n,m);
                     cnt++;
                 }
             }
         }
         return cnt;
+        
+    }
+    void dfs(vector<vector<int>>& grid,int i,int j,int n,int m)
+    {
+        if(i<0 or j<0 or i==n or j==m or grid[i][j]!=0)return;
+        grid[i][j]=2;
+        dfs(grid,i-1,j,n,m);
+        dfs(grid,i+1,j,n,m);
+        dfs(grid,i,j-1,n,m);
+        dfs(grid,i,j+1,n,m);
+    }
+    void boundarydfs(vector<vector<int>>& grid,int i,int j,int n,int m)
+    {
+        if(i<0 or j<0 or i==n or j==m or grid[i][j]!=0)
+        {
+            return;
+        }
+        grid[i][j]=1;
+        boundarydfs(grid,i-1,j,n,m);
+        boundarydfs(grid,i+1,j,n,m);
+        boundarydfs(grid,i,j+1,n,m);
+        boundarydfs(grid,i,j-1,n,m);
     }
 };
