@@ -1,12 +1,11 @@
 class Solution {
 public:
-    bool isValid(vector<vector<int>>& grid,int i,int j)
+    bool isValid(vector<vector<int>>& mat,int i,int j)
     {
-        if(i>=0 and j>=0 and i<grid.size() and j<grid[0].size() and grid[i][j]==1)return true;
+        if(i>=0 and i<mat.size() and j>=0 and j<mat[0].size() and mat[i][j]==-1)return true;
         return false;
     }
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-        vector<vector<int>>ans=mat;
         int n=mat.size();
         int m=mat[0].size();
         queue<pair<int,int>>q;
@@ -14,50 +13,40 @@ public:
         {
             for(int j=0;j<m;j++)
             {
-                if(mat[i][j]==0)
-                {
-                    q.push({i,j});
-                    ans[i][j]=0;
-                }
+                if(mat[i][j]==0)q.push({i,j});
+                else mat[i][j]=-1;
             }
         }
-        int cnt=0;
         while(q.empty()==false)
         {
-            cnt++;
-            int n=q.size();
-            for(int k=0;k<n;k++)
+            int s=q.size();
+            while(s--)
             {
-                int i=q.front().first;
-                int j=q.front().second;
+                int x=q.front().first;
+                int y=q.front().second;
                 q.pop();
-                if(isValid(mat,i-1,j))
+                if(isValid(mat,x-1,y))
                 {
-                    q.push({i-1,j});
-                    mat[i-1][j]=0;
-                    ans[i-1][j]=cnt;
+                    q.push({x-1,y});
+                    mat[x-1][y]=1+mat[x][y];
                 }
-                if(isValid(mat,i+1,j))
+                if(isValid(mat,x+1,y))
                 {
-                    q.push({i+1,j});
-                    mat[i+1][j]=0;
-                    ans[i+1][j]=cnt;
+                    q.push({x+1,y});
+                    mat[x+1][y]=1+mat[x][y];
                 }
-                if(isValid(mat,i,j-1))
+                if(isValid(mat,x,y-1))
                 {
-                    q.push({i,j-1});
-                    mat[i][j-1]=0;
-                    ans[i][j-1]=cnt;
+                    q.push({x,y-1});
+                    mat[x][y-1]=1+mat[x][y];
                 }
-                if(isValid(mat,i,j+1))
+                if(isValid(mat,x,y+1))
                 {
-                    q.push({i,j+1});
-                    mat[i][j+1]=0;
-                    ans[i][j+1]=cnt;
+                    q.push({x,y+1});
+                    mat[x][y+1]=1+mat[x][y];
                 }
             }
-            
         }
-        return ans;
+        return mat;
     }
 };
