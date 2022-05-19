@@ -9,10 +9,13 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+//base condition    induction    hypothesis//
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        if(root==NULL)return 0;
+        //Base condition//
+        if(root==nullptr)return 0;
+        //Hypothesis left and right//
         int lh=maxDepth(root->left);
         int rh=maxDepth(root->right);
         return 1+max(lh,rh);
