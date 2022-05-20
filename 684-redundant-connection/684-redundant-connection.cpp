@@ -1,27 +1,38 @@
 class Solution {
 public:
-    int findPar(int node,vector<int>&parent)
+    int findPar(int node,vector<int>& parent)
     {
         if(node==parent[node])return node;
-        return parent[node]=findPar(parent[node],parent);
+        else return parent[node]=findPar(parent[node],parent);
     }
-    void unioni(int i,int j,vector<int>&parent)
+    void unioni(int i,int j,vector<int>& parent,vector<int>& rank)
     {
         i=findPar(i,parent);
         j=findPar(j,parent);
-        if(i==j)return;
-        else {parent[i]=j;
-        return;}
+        if(i!=j)
+        {
+            if(rank[i]>rank[j])
+            {
+                parent[j]=i;
+            }
+            else if(rank[i]<rank[j])
+            {
+                parent[j]=i;
+            }
+            else
+            {
+                parent[i]=j;
+                rank[j]++;
+            }
+        }
     }
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         vector<int>parent(1001);
-       
-        for(int i=0;i<1001;i++)
-        {
-            parent[i]=i;
-        }
-        vector<int> answer;
-        for(int i=0;i<edges.size();i++)
+        vector<int>rank(1001,0);
+        int n=edges.size();
+        vector<int>answer;
+        for(int i=0;i<1001;i++)parent[i]=i;
+        for(int i=0;i<n;i++)
         {
             if(findPar(edges[i][0],parent)==findPar(edges[i][1],parent))
             {
@@ -31,8 +42,9 @@ public:
             }
             else
             {
-                unioni(edges[i][0],edges[i][1],parent);
+                unioni(edges[i][0],edges[i][1],parent,rank);
             }
+            
         }
         return answer;
     }
