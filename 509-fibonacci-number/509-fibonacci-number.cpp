@@ -1,17 +1,19 @@
 class Solution {
 public:
     int fib(int n) {
-       vector<int>dp(n+1,-1);
-        int ans=calculate(n,dp);
+        vector<int>dp(n+1,-1);
+        int ans =calculate(dp,n);
         return ans;
     }
-    int calculate(int n,vector<int>& dp)
+    int calculate(vector<int>& dp,int n)
     {
-        if(n==0 or n==1)
+        if(n==0 or n==1)return n;
+        dp[0]=0;
+        dp[1]=1;
+        for(int i=2;i<=n;i++)
         {
-            dp[n]=n;
+            dp[i]=dp[i-1]+dp[i-2];
         }
-        if(dp[n]!=-1)return dp[n];
-        return dp[n]=calculate(n-1,dp)+calculate(n-2,dp);
+        return dp[n];
     }
 };
