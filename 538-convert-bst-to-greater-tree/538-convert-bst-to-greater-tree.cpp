@@ -12,16 +12,16 @@
 class Solution {
 public:
     TreeNode* convertBST(TreeNode* root) {
-        int cnt=0;
-        helepr(root,cnt);
-        return root;
+      int sum=0;
+        helper(root,sum);
+       return root;
     }
-    void helepr(TreeNode* root,int &cnt)
+      void helper(TreeNode* root,int &sum)
     {
-        if(root==nullptr)return;
-        helepr(root->right,cnt);
-        root->val+=cnt;
-        cnt=root->val;
-        helepr(root->left,cnt);
+        if(root==NULL)return;
+        helper(root->right,sum);
+        root->val+=sum;
+          sum=root->val;
+        helper(root->left,sum);
     }
 };
