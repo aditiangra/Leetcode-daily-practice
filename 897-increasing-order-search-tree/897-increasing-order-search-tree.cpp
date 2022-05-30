@@ -13,30 +13,22 @@ class Solution {
 public:
     TreeNode* increasingBST(TreeNode* root) {
         vector<int>inorder;
-        find_inorder(inorder,root);
-        TreeNode* ans=createTree(root,inorder);
-        return ans;
-    }
-    TreeNode* createTree(TreeNode* root,vector<int>&inorder)
-    {
-        if(inorder.size()==0)return nullptr;
-        TreeNode* res;
+        helper(root,inorder);
         TreeNode* ans=new TreeNode(inorder[0]);
-        res=ans;
+        TreeNode* res=ans;
         for(int i=1;i<inorder.size();i++)
         {
-            TreeNode* temp=new TreeNode(inorder[i]);
-            ans->right=temp;
-            ans=ans->right;
+            TreeNode* dummy=new TreeNode(inorder[i]);
+            res->right=dummy;
+            res=res->right;
         }
-        ans->right=nullptr;
-        return res;
+        return ans;
     }
-    void find_inorder(vector<int>&inorder,TreeNode* root)
+    void helper(TreeNode* root,vector<int>& ans)
     {
-        if(root==nullptr)return ;
-        find_inorder(inorder,root->left);
-        inorder.push_back(root->val);
-        find_inorder(inorder,root->right);
+        if(root==NULL)return;
+        helper(root->left,ans);
+        ans.push_back(root->val);
+        helper(root->right,ans);
     }
 };
