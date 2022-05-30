@@ -11,16 +11,24 @@
  */
 class Solution {
 public:
-    bool isValidBSTHelper(TreeNode* root, long min, long max) {
-		if(root == NULL){
-			return true;
-		}   
-		if(root->val > min && root->val < max) {
-			return isValidBSTHelper(root->left, min, root->val) && isValidBSTHelper(root->right, root->val, max);
-		}    
-		return false;
-	}
-	bool isValidBST(TreeNode* root) {
-		return isValidBSTHelper(root, LONG_MIN, LONG_MAX);
-	} 
+    bool isValidBST(TreeNode* root) {
+      if(root==NULL)return true;
+    vector<int>inorder;
+        helper(root,inorder);
+        vector<int> ans=inorder;
+
+        sort(ans.begin(),ans.end());
+        for(int i=0;i<ans.size()-1;i++)
+        {
+            if(ans[i]==ans[i+1])return false;
+        }
+        return ans==inorder;
+    }
+    void helper(TreeNode* root,vector<int>& ans)
+    {
+        if(root==NULL)return;
+        helper(root->left,ans);
+        ans.push_back(root->val);
+        helper(root->right,ans);
+    }
 };
