@@ -1,14 +1,23 @@
 class Solution {
 public:
-    int maxProfit(vector<int>& prices) {
-        int profit=0;
-        for(int i=1;i<prices.size();i++)
+    int f(int ind,int buy,vector<int>&prices,vector<vector<int>> &dp)
+    {
+        if(ind==prices.size())return 0;
+        if(dp[ind][buy]!=-1)return dp[ind][buy];
+        if(buy)//we need to buy now//we can buy or not buy that particular stock//
         {
-            if(prices[i]>prices[i-1])
-            {
-                profit+=prices[i]-prices[i-1];
-            }
+            return dp[ind][buy]=max(-prices[ind]+f(ind+1,0,prices,dp),0+f(ind+1,1,prices,dp));
         }
-        return profit;
+        else//we need to sell now//we can sell or not sell that particular stock//
+        {
+            return dp[ind][buy]=max(prices[ind]+f(ind+1,1,prices,dp),0+f(ind+1,0,prices,dp));
+        }
+    }
+    int maxProfit(vector<int>& prices) {
+        int ind=0;
+        int buy=1;
+        int n=prices.size();
+        vector<vector<int>>dp(n,vector<int>(2,-1));
+        return f(ind,buy,prices,dp);
     }
 };
