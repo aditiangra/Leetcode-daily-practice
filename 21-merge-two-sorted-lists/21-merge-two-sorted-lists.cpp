@@ -32,6 +32,5 @@ public:
         if(list1==NULL)temp->next=list2;
         if(list2==NULL)temp->next=list1;
         return dummy->next;
-        
     }
 };
