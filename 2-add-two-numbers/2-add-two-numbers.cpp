@@ -11,29 +11,28 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode* dummy=new ListNode(-1);
-        ListNode* ans=dummy;
+        ListNode* dummy=new ListNode(0);
+        ListNode* temp=dummy;
         int carry=0;
-        while(l1!=NULL or l2!=NULL)
+        while(l1!=NULL or l2!=NULL or carry!=0)
         {
-            int sum=carry;
+            int sum=0;
             if(l1!=NULL)
-            {sum+=l1->val;
-            l1=l1->next;}
+            {
+                sum+=l1->val;
+                l1=l1->next;
+            }
             if(l2!=NULL)
-            {sum+=l2->val;
-            l2=l2->next;}
+            {
+                sum+=l2->val;
+                l2=l2->next;
+            }
+            sum+=carry;
             carry=sum/10;
-            sum=sum%10;
-            ans->next=new ListNode(sum);
-            ans=ans->next;
+            ListNode* node=new ListNode(sum%10);
+            temp->next=node;
+            temp=temp->next;
         }
-        if(carry!=0)
-        {
-            ans->next=new ListNode(carry);
-            ans=ans->next;
-        }
-        ans->next=NULL;
         return dummy->next;
     }
 };
