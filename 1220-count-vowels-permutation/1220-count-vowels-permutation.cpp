@@ -1,65 +1,31 @@
 class Solution {
 public:
-    
-    int MOD=1e9+7;
-
-    long long int f(int n, int i, char c, vector<vector<int>> &dp, unordered_map<char, int> &mp){
-        
-        if(i==n) return 1;
-        
-        long long count = 0;
-        
-        if(dp[mp[c]][i]!=-1) return dp[mp[c]][i]%MOD;
-        
-        if(c=='a'){
-		// after a only e is allowed
-            count += f(n, i+1, 'e', dp, mp);
-        }
-        
-        if(c=='e'){
-		// after e only a and i are allowed
-            count += f(n, i+1, 'a', dp, mp);
-            count += f(n, i+1, 'i', dp, mp);
-        }
-        if(c=='i'){
-		// after i everthing except i is allowed
-            count += f(n, i+1, 'a', dp, mp);
-            count += f(n, i+1, 'e', dp, mp);
-            count += f(n, i+1, 'o', dp, mp);
-            count += f(n, i+1, 'u', dp, mp);
-        }
-        if(c=='o'){
-		// after o only i and u are allowed
-            count += f(n, i+1, 'i', dp, mp);
-            count += f(n, i+1, 'u', dp, mp);
-        }
-        
-        if(c=='u'){
-		// after u only a is allowed
-            count += f(n, i+1, 'a', dp, mp);
-        }
-        
-        return dp[mp[c]][i] = count%MOD;
-        
-    }
+    long long mod = 1e9+7;
+    long long dp[20005][5]; //at index i, no. of vowels that can be present 
     
     int countVowelPermutation(int n) {
-        
-		// map to convert char to int for using in dp vector for memoization purpose
-        unordered_map<char, int> mp;
-        mp['a'] = 0;
-        mp['e'] = 1;
-        mp['i'] = 2;
-        mp['o'] = 3;
-        mp['u'] = 4;
-        
-        vector<vector<int>> dp(5, vector<int>(n+1, -1));
-		
-				//call for each starting from each vowel after that for changing the character values our recursive call will take care of
-
-        long long cnt = f(n, 1, 'a', dp, mp) + f(n, 1, 'e', dp, mp) + f(n, 1, 'i', dp, mp) + f(n, 1, 'o', dp, mp) + f(n, 1, 'u', dp, mp); 
-        
-        return cnt%MOD;
-        
+        memset(dp,0,sizeof(dp));
+        for(int i=0;i<5;i++)
+            dp[0][i]=1;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<5;j++){
+                if(j==0){ //a
+                    dp[i][j]=(dp[i-1][1]+dp[i-1][2]+dp[i-1][4])%mod;
+                }
+                if(j==1){ //e
+                    dp[i][j]=(dp[i-1][0]+dp[i-1][2])%mod;
+                }
+                if(j==2){ //i
+                    dp[i][j]=(dp[i-1][1]+dp[i-1][3])%mod;
+                }
+                if(j==3){ //o
+                    dp[i][j]=(dp[i-1][2])%mod;
+                }
+                if(j==4){ //u
+                    dp[i][j]=(dp[i-1][2]+dp[i-1][3])%mod;
+                }
+            }
+        }
+        return (dp[n-1][0]+dp[n-1][1]+dp[n-1][2]+dp[n-1][3]+dp[n-1][4])%mod;
     }
 };
