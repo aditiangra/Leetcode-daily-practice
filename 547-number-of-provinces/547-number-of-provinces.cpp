@@ -1,54 +1,32 @@
 class Solution {
 public:
-    int findPar(int node,vector<int>&parent)
+    void dfs(int v,vector<bool>& visited,vector<vector<int>>& graph)
     {
-        if(node==parent[node])return node;
-        return parent[node]=findPar(parent[node],parent);
-    }
-    void unioni(int i,int j,vector<int>& parent,vector<int>& rank)
-    {
-        i=findPar(i,parent);
-        j=findPar(j,parent);
-        if(rank[i]>rank[j])
+        //marking the node as visited//
+        visited[v]=true;
+        //checking for neighbours//
+        for(int i=0;i<graph[v].size();i++)
         {
-            parent[j]=i;
-        }
-        else if(rank[i]<rank[j])
-        {
-            parent[i]=j;
-        }
-        else
-        {
-            parent[i]=j;
-            rank[j]++;
-        }
-    }
-    int findCircleNum(vector<vector<int>>& isConnected) {
-        int n=isConnected.size();
-        vector<int>parent(n);
-        vector<int>rank(n,0);
-        for(int i=0;i<n;i++)parent[i]=i;        
-        for(int i=0;i<n;i++)
-        {
-            for(int j=i;j<n;j++)
+            if(i==v)continue;
+            if(graph[v][i]==1 and visited[i]==false)
             {
-                if(isConnected[i][j]==1)
-                {
-                    unioni(i,j,parent,rank);
-                }
+                dfs(i,visited,graph);
             }
         }
-        map<int,int>mpp;
+    }
+    int findCircleNum(vector<vector<int>>& graph) {
+        int n=graph.size();
+        //making the visited array//
+        vector<bool> visited(n,false);
+        int cnt=0;
         for(int i=0;i<n;i++)
         {
-            for(int j=i;j<n;j++)
+            if(visited[i]==false)
             {
-                if(isConnected[i][j]==1 and mpp.find(findPar(i,parent))==mpp.end())
-                {
-                    mpp[findPar(i,parent)]=1;
-                }
+                cnt++;
+                dfs(i,visited,graph);
             }
         }
-        return mpp.size();
+        return cnt;
     }
 };
