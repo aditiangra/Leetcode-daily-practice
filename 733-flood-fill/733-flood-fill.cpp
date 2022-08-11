@@ -1,46 +1,26 @@
 class Solution {
 public:
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+    void dfs(int row,int col,vector<vector<int>>& image,vector<vector<int>>& ans,int newColor,int iniColor,int delRow[],int delCol[])
+    {
+        ans[row][col]=newColor;
         int n=image.size();
         int m=image[0].size();
-        int oldColor=image[sr][sc];
-        dfs(image,sr,sc,oldColor,newColor,n,m);
-        for(int i=0;i<n;i++)
+        for(int i=0;i<4;i++)
         {
-            for(int j=0;j<m;j++)
+            int nrow=row+delRow[i];
+            int ncol=col+delCol[i];
+            if(nrow>=0 && ncol>=0 && nrow<n && ncol<m && image[nrow][ncol]==iniColor && ans[nrow][ncol]!=newColor)
             {
-                if(image[i][j]==-1)
-                {
-                    image[i][j]=newColor;
-                }
+                dfs(nrow,ncol,image,ans,newColor,iniColor,delRow,delCol);
             }
         }
-        return image;
     }
-    bool isValid(vector<vector<int>>& image,int i,int j,int oldColor,int newColor,int n,int m)
-    {
-        if(i>=0 and j>=0 and i<n and j<m and image[i][j]==oldColor)return true;
-        return false;
-    }
-    void dfs(vector<vector<int>>& image,int i,int j,int oldColor,int newColor,int n,int m)
-    {
-        image[i][j]=-1;
-        if(isValid(image,i-1,j,oldColor,newColor,n,m))
-        {
-            dfs(image,i-1,j,oldColor,newColor,n,m);
-        }
-        if(isValid(image,i+1,j,oldColor,newColor,n,m))
-        {
-            dfs(image,i+1,j,oldColor,newColor,n,m);
-        }
-        if(isValid(image,i,j-1,oldColor,newColor,n,m))
-        {
-            dfs(image,i,j-1,oldColor,newColor,n,m);
-        }
-        if(isValid(image,i,j+1,oldColor,newColor,n,m))
-        {
-            dfs(image,i,j+1,oldColor,newColor,n,m);
-        }
-        
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int iniColor=image[sr][sc];
+        vector<vector<int>> ans=image;
+        int delRow[]={-1,0,1,0};
+        int delCol[]={0,-1,0,1};
+        dfs(sr,sc,image,ans,color,iniColor,delRow,delCol);
+        return ans;
     }
 };
