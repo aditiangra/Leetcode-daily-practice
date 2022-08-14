@@ -1,30 +1,17 @@
-/*
-// Definition for Employee.
-class Employee {
-public:
-    int id;
-    int importance;
-    vector<int> subordinates;
-};
-*/
-
 class Solution {
 public:
+    unordered_map<int, Employee*> emap;
     int getImportance(vector<Employee*> employees, int id) {
-        int result=0;
-        for(auto it:employees)
-        {
-            if(it->id==id)
-            {
-                result=it->importance;
-                if(it->subordinates.empty()==false)
-                {
-                    for(auto i:it->subordinates)
-                    {
-                        result+=getImportance(employees,i);
-                    }
-                }
-            }
+        for(auto& emp : employees){
+            emap[emp->id] = emp;
+        }
+        return dfs(id);
+    }
+    int dfs(int id){
+        Employee* emp = emap[id];
+        int result = emp->importance;
+        for(auto& s : emp->subordinates){
+            result += dfs(s);
         }
         return result;
     }
