@@ -1,59 +1,73 @@
-class Solution
-{
+class Solution {
 public:
-    int orangesRotting(vector<vector<int>> &grid)
+    bool isValid(int i,int j,vector<vector<int>>& grid)
     {
-        if (grid.empty()) // if there is no orange.
-            return 0;
-
-        int countFreshOranges = 0;
-        int m = grid.size();
-        int n = grid[0].size();
-
-        queue<pair<int, int>> q; // queue to store the index of the cell where rotten oranges are placed.
-
-        for (int i = 0; i < m; i++)
+        if(i>=0 and j>=0 and i<grid.size() and j<grid[0].size() and grid[i][j]==1)return true;
+        return false;
+    }
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        int freshOranges=0;
+        for(int i=0;i<n;i++)
         {
-            for (int j = 0; j < n; j++)
+            for(int j=0;j<m;j++)
             {
-                if (grid[i][j] == 1)
-                    countFreshOranges++;
-                else if (grid[i][j] == 2)
-                    q.push({i, j});
+                if(grid[i][j]==1)freshOranges++;
             }
         }
-
-        int time = 0;
-        // four adjacent positions at which the oranged placed will get rotten.
-        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
-
-        while (countFreshOranges != 0 && !q.empty())
+        if(freshOranges==0)return 0;
+        queue<pair<int,int>>q;
+        for(int i=0;i<n;i++)
         {
-            int qsize = q.size();
-
-            for (int i = 0; i < qsize; i++)
+            for(int j=0;j<m;j++)
             {
-                int rottenI = q.front().first;
-                int rottenJ = q.front().second;
-                q.pop();
-
-                for (auto d : dirs)
+                if(grid[i][j]==2)
                 {
-                    int newX = rottenI + d.first;
-                    int newY = rottenJ + d.second;
-                    // if we got any fresh orange adjacent to the rotten orange then it will get rotten and
-                    // count of fresh oranges will reduce and we will push the new index of rotten orange in 
-                    // the queue.
-                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] == 1)
-                    {
-                        grid[newX][newY] = 2;
-                        countFreshOranges--;
-                        q.push({newX, newY});
-                    }
+                    q.push({i,j});
                 }
             }
-            time++;
         }
-        return countFreshOranges == 0 ? time : -1;
+        int cnt=0;
+        while(q.empty()==false)
+        {
+            int size=q.size();
+            cnt++;
+            while(size--)
+            {
+                int x=q.front().first;
+                int y=q.front().second;
+                q.pop();
+                if(isValid(x-1,y,grid))
+                {
+                    grid[x-1][y]=2;
+                    freshOranges--;
+                    q.push({x-1,y});
+                }
+                 if(isValid(x+1,y,grid))
+                {
+                    grid[x+1][y]=2;
+                      freshOranges--;
+                    q.push({x+1,y});
+                }
+                 if(isValid(x,y-1,grid))
+                {
+                    grid[x][y-1]=2;
+                      freshOranges--;
+                    q.push({x,y-1});
+                }
+                 if(isValid(x,y+1,grid))
+                {
+                    grid[x][y+1]=2;
+                      freshOranges--;
+                    q.push({x,y+1});
+                }
+            }
+        }
+       if(freshOranges==0)
+       {
+           return cnt-1;
+       }
+        return -1;
     }
 };
