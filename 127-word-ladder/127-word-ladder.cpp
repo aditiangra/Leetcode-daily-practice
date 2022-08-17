@@ -1,32 +1,44 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> dict(wordList.begin(), wordList.end());
-        queue<string> todo;
-        todo.push(beginWord);
-        int ladder = 1;
-        while (!todo.empty()) {
-            int n = todo.size();
-            for (int i = 0; i < n; i++) {
-                string word = todo.front();
-                todo.pop();
-                if (word == endWord) {
-                    return ladder;
-                }
-                dict.erase(word);
-                for (int j = 0; j < word.size(); j++) {
-                    char c = word[j];
-                    for (int k = 0; k < 26; k++) {
-                        word[j] = 'a' + k;
-                        if (dict.find(word) != dict.end()) {
-                            todo.push(word);
+        //finding endWord in the list//
+        if(find(wordList.begin(),wordList.end(),endWord)==wordList.end())return 0;
+        //inserting everything in a set//
+        set<string>s;
+        for(int i=0;i<wordList.size();i++)
+        {
+            s.insert(wordList[i]);
+        }
+        //starting bfs//
+        queue<string>q;
+        q.push(beginWord);
+        int cnt=0;
+        while(q.empty()==false)
+        {
+            cnt++;
+            int size=q.size();
+            while(size--)
+            {
+                string curr=q.front();
+                q.pop();
+                for(int j=0;j<curr.size();j++)
+                {
+                    string temp=curr;
+                    for(char c='a';c<='z';c++)
+                    {
+                        temp[j]=c;
+                        if(temp==curr)continue;
+                        if(temp==endWord)return cnt+1;
+                        if(s.find(temp)!=s.end())
+                        {
+                            q.push(temp);
+                            s.erase(temp);
                         }
-                     }
-                    word[j] = c;
+                    }
                 }
             }
-            ladder++;
         }
         return 0;
-    }
+        
+            }
 };
