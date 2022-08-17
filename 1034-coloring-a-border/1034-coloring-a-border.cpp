@@ -1,33 +1,50 @@
 class Solution {
 public:
-    vector<vector<int>> colorBorder(vector<vector<int>>& grid, int row, int col, int color) {
-        int n=grid.size();
-        int m=grid[0].size();
-        int oldcolor=grid[row][col];
-        dfs(grid,row,col,oldcolor);
-        for(int i=0;i<grid.size();i++)
-        {
-            for(int j=0;j<grid[0].size();j++)
-            {
-                if(grid[i][j]<0)
-                {
-                    grid[i][j]=color;
-                }
-            }
-        }
-        return grid;
+    bool isVisited[51][51];
+    vector<vector<int>> result;
+    int ROW, COL, COLOR;
+    
+    bool isValid(vector<vector<int>>& grid, int i, int j){
+        if((i>=0 and i<ROW) and (j>=0 and j<COL) and (grid[i][j] == COLOR) and (!isVisited[i][j]))
+            return true;
+        return false;
     }
-    void dfs(vector<vector<int>>& grid, int row, int col, int oldcolor)
-    {
-        if(row<0 || row>=grid.size() || col<0 || col>=grid[0].size() || grid[row][col]!=oldcolor)return;
-        grid[row][col]=-oldcolor;
-        dfs(grid,row-1,col,oldcolor);
-        dfs(grid,row+1,col,oldcolor);
-        dfs(grid,row,col-1,oldcolor);
-        dfs(grid,row,col+1,oldcolor);
-        if(row>0 && row<grid.size()-1 && col>0 && col<grid[0].size()-1 && abs(grid[row-1][col])==oldcolor && abs(grid[row+1][col])==oldcolor && abs(grid[row][col-1])==oldcolor && abs(grid[row][col+1])==oldcolor)
-        {
-            grid[row][col]=oldcolor;
+    
+    bool isBorder(vector<vector<int>>& grid, int i, int j){
+        if(i == 0 || i == ROW-1 || j == 0 || j == COL-1)
+            return true;
+        if(grid[i][j+1] != COLOR || grid[i][j-1] != COLOR || grid[i+1][j] != COLOR || grid[i-1][j] != COLOR)
+            return true;
+        return false;
+    }
+    
+    void DFS(vector<vector<int>>& grid, int i, int j, int color){
+        isVisited[i][j] = true;
+        if(isBorder(grid, i, j))
+            result[i][j] = color;
+        if(isValid(grid, i, j+1)){
+            DFS(grid, i, j+1, color);
         }
+        if(isValid(grid, i, j-1)){
+            DFS(grid, i, j-1, color);
+        }
+        if(isValid(grid, i+1, j)){
+            DFS(grid, i+1, j, color);
+        }
+        if(isValid(grid, i-1, j)){
+            DFS(grid, i-1, j, color);
+        }
+    }
+    
+    vector<vector<int>> colorBorder(vector<vector<int>>& grid, int r0, int c0, int color) {
+        memset(isVisited, false, sizeof isVisited);
+        ROW = grid.size(); COL = grid[0].size(); COLOR = grid[r0][c0];
+        result.resize(ROW, vector<int>(COL));
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++)
+                result[i][j] = grid[i][j];
+        }
+        DFS(grid, r0, c0, color);
+        return result;    
     }
 };
