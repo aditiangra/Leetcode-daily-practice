@@ -11,11 +11,14 @@
 class Solution {
 public:
     ListNode* sortList(ListNode* head) {
-     if(head==nullptr or head->next==nullptr)return head;
+        //is it any posibility that list is null or it is having a single element//
+        if(head==nullptr or head->next==nullptr)return head;
+        //single element is always sorted//
+        //find the middle of ll and sort it using recursion//
         ListNode* temp=head;
         ListNode* slow=head;
         ListNode* fast=head;
-        while(fast!=nullptr and fast->next!=nullptr)
+        while(fast && fast->next)
         {
             temp=slow;
             slow=slow->next;
