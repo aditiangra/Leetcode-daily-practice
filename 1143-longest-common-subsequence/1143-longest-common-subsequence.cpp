@@ -28,7 +28,28 @@ public:
         }
             }
         }
-        return dp[n][m];
+        int len=dp[n][m];
+        int i=n;int j=m;
+        int index=len-1;
+        string str="";
+        for(int k=0;k<len;k++)str+='&';
+        while(i>0 and j>0)
+        {
+            if(text1[i-1]==text2[j-1])
+            {
+                str[index]=text1[i-1];
+                i--;
+                j--;
+                index--;
+            }
+            else if(dp[i-1][j]>dp[i][j-1])
+            {
+                i--;
+            }
+            else j--;
+        }
+        cout<<str<<endl;
+        return len;
     }
     
 };
